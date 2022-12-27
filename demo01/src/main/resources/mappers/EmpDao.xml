@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.EmpDao">
+    <resultMap id="EmpMap" type="com.pojo.Emp">
+        <id property="empno" column="empno" jdbcType="INTEGER"/>
+        <association property="dept"/>
+    </resultMap>
+
+    <select id="select" resultMap="EmpMap">
+        select * from emp e,dept d
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

@@ -1,0 +1,47 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/test
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://192.168.208.129:3306/test?serverTimezone=Asia/Shanghai&useSSL=false&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql:///orcl?serverTimezone=Asia/Shanghai&useSSL=false&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: 123456
+
+#  redis:
+#    password: 123456        #集群也要配置redis密码
+#    timeout: 10s
+#    cluster:
+#      nodes:
+#        - 192.168.208.129:6001
+#        - 192.168.208.129:6002
+#        - 192.168.208.129:6003
+#        - 192.168.208.129:6004
+#        - 192.168.208.129:6005
+#        - 192.168.208.129:6006
+
+#  thymeleaf:
+#    encoding: utf-8
+#    cache: false
+  jackson:
+    date-format: yyyy-MM-dd HH:mm
+    time-zone: GMT+8
+mybatis-plus:
+  type-aliases-package: com.pojo
+  mapper-locations: classpath:mappers/*.xml
+  configuration:
+    auto-mapping-behavior: full
+    use-generated-keys: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: false
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-value: 1
+      table-underline: false
+      logic-not-delete-value: 0
+
+#pagehelper:
+#  reasonable: true
+#  page-size-zero: true
