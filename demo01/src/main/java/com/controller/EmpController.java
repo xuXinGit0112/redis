@@ -5,10 +5,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dao.EmpRepository;
 import com.pojo.Emp;
 import com.service.EmpService;
-import com.utils.RedisUtil;
+import com.utils.RedisUtil2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -28,7 +26,7 @@ public class EmpController {
     @Resource
     private EmpService empService;
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisUtil2 redisUtil2;
 
     /**
      * 使用@EnableCaching的方式对redis进行增删改查
@@ -74,23 +72,23 @@ public class EmpController {
     @GetMapping("/findEmp2")
     public List<Emp> find2(int pageIndex, int pageSize){
 
-        List<Emp> list = (List<Emp>) redisUtil.get("list");
+        List<Emp> list = (List<Emp>) redisUtil2.get("list");
         if(list == null){
             System.out.println("list == null");
             list = empService.page(new Page<Emp>(pageIndex,pageSize)).getRecords();
             list = empService.page(new Page<Emp>(pageIndex,pageSize)).getRecords();
-            redisUtil.set("list",list);
+            redisUtil2.set("list",list);
         }
 
         return list;
     }
     @GetMapping("/findEmp3")
     public List<Emp> find3(long pageIndex, long pageSize){
-        List<Object> list = redisUtil.lRange("mylist",(pageIndex-1)*pageSize,pageIndex*pageSize-1);
+        List<Object> list = redisUtil2.lRange("mylist",(pageIndex-1)*pageSize,pageIndex*pageSize-1);
         if(list == null || list.size() == 0){
             List<Emp> emps = empService.page(new Page<Emp>(pageIndex,pageSize)).getRecords();
 
-            redisUtil.rPushAll("mylist",emps,30L);
+            redisUtil2.rPushAll("mylist",emps,30L);
             return emps;
         }
 

@@ -7,7 +7,7 @@ import com.dao.EmpDao;
 import com.dao.EmpRepository;
 import com.pojo.Emp;
 import com.service.EmpService;
-import com.utils.RedisUtil;
+import com.utils.RedisUtil2;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,7 +26,7 @@ public class EmpServiceImpl extends ServiceImpl<EmpDao, Emp> implements EmpServi
     @Resource
     private RedisTemplate redisTemplate;
     @Resource
-    private RedisUtil redisUtil;
+    private RedisUtil2 redisUtil2;
     @Cacheable(cacheNames = "emp", key = "#id",
             unless = "#result==null")
     @Override
@@ -83,7 +83,7 @@ public class EmpServiceImpl extends ServiceImpl<EmpDao, Emp> implements EmpServi
     public Emp update3(Emp emp) {
         System.out.println("update3");
         super.baseMapper.updateById(emp);
-        redisUtil.set("emp"+emp.getEmpno(),emp);
+        redisUtil2.set("emp"+emp.getEmpno(),emp);
         return emp;
     }
 
@@ -91,8 +91,8 @@ public class EmpServiceImpl extends ServiceImpl<EmpDao, Emp> implements EmpServi
     public boolean remove3(int id) {
         boolean is_delete=false;
         if(super.baseMapper.deleteById(id)>0){
-            if(redisUtil.exists("emp"+id)){
-                redisUtil.remove("emp"+id);
+            if(redisUtil2.exists("emp"+id)){
+                redisUtil2.remove("emp"+id);
             }
             is_delete=true;
         }
